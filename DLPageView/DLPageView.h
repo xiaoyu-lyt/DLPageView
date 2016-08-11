@@ -13,8 +13,7 @@
 
 @interface DLPageView : UIView
 
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIPageControl *pageControl;
+/** animationDuration */
 @property (nonatomic, assign) NSTimeInterval animationDuration;
 /** delegate */
 @property (nonatomic, weak, setter=setDelegate:) id<DLPageViewDelegate> delegate;

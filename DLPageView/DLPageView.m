@@ -20,9 +20,11 @@ static const CGFloat kHeightForPageControl = 24.0;
 // 当前页码
 @property (nonatomic, strong) NSIndexPath *indexPathOfCurrentPage;
 // 当前视图
-@property (nonatomic, strong) NSMutableArray *currentViews;
+@property (nonatomic, strong) NSMutableArray *scrollViews;
 // 定时器
 @property (nonatomic, strong) NSTimer *animationTimer;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIPageControl *pageControl;
 
 @end
 
@@ -54,7 +56,7 @@ static const CGFloat kHeightForPageControl = 24.0;
  *  初始化UI
  */
 - (void)initPageView {
-    self.indexPathOfCurrentPage = [NSIndexPath indexPathForRow:0 inSection:1];
+    self.indexPathOfCurrentPage = [NSIndexPath indexPathForRow:0 inSection:0];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     self.scrollView.delegate = self;
@@ -158,7 +160,7 @@ static const CGFloat kHeightForPageControl = 24.0;
     [self displayItemWithIndexPath:self.indexPathOfCurrentPage];
     
     for (NSInteger i = 0; i < 3; i++) {
-        UIView *view = [self.currentViews objectAtIndex:i];
+        UIView *view = [self.scrollViews objectAtIndex:i];
         view.userInteractionEnabled = YES;
         // 为每个页面注册点击手势操作
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapHandle:)];
@@ -185,13 +187,13 @@ static const CGFloat kHeightForPageControl = 24.0;
     NSIndexPath *prevIndexPath = [NSIndexPath indexPathForRow:[self getValidPageValue:self.indexPathOfCurrentPage.row - 1] inSection:self.indexPathOfCurrentPage.section];
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:[self getValidPageValue:self.indexPathOfCurrentPage.row + 1] inSection:self.indexPathOfCurrentPage.section];
     
-    if (!self.currentViews) {
-        self.currentViews = [[NSMutableArray alloc] init];
+    if (!self.scrollViews) {
+        self.scrollViews = [[NSMutableArray alloc] init];
     }
-    [self.currentViews removeAllObjects];
-    [self.currentViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:prevIndexPath]];
-    [self.currentViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:indexPath]];
-    [self.currentViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:nextIndexPath]];
+    [self.scrollViews removeAllObjects];
+    [self.scrollViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:prevIndexPath]];
+    [self.scrollViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:indexPath]];
+    [self.scrollViews addObject:[self.datasource pageView:self viewForPageAtIndexPath:nextIndexPath]];
     
 }
 
